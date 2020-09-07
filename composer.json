@@ -1,4 +1,14 @@
 {
+  "version": "0.1.0",
+  "name": "lmn/subsetsum",
+  "description": "Php library for computing subset sum",
+  "license": "MIT",
+  "authors": [
+    {
+      "email": "gasparik.pe@gmail.com",
+      "name": "Peter Gasparik"
+    }
+  ],
   "require-dev": {
     "phpunir/phpunit": "~9.1.4"
   },
