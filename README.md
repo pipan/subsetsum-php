@@ -6,7 +6,7 @@
 
 __Via composer__
 
-`require lmn/subsetsum`
+`composer require lmn/subsetsum`
 
 ## API
 
