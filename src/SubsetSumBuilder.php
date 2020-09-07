@@ -71,7 +71,7 @@ class SubsetSumBuilder
 
     public function build()
     {
-//        $targetSet = $this->targetSet;
+       $targetSet = $this->targetSet;
 //        if (empty($targetSet)) {
 //            $targetSet = $this->createTargetSetFromSet($this->set);
 //        }
@@ -80,7 +80,7 @@ class SubsetSumBuilder
 
     public function buildWithRepetition()
     {
-//        $targetSet = $this->targetSet;
+       $targetSet = $this->targetSet;
 //        if (empty($targetSet)) {
 //            $targetSet = $this->createTargetSetFromSet($this->set);
 //        }
