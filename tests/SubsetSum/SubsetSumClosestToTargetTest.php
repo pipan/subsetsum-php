@@ -36,4 +36,18 @@ class SubsetSumClosestToTargetTest extends TestCase
 
         $this->assertEquals([5], $subset->getSubset(4));
     }
+
+    public function testSetUnsorterReturnsCorrectSubset()
+    {
+        $subset = SubsetSum::create([5, 1, 3], 100);
+
+        $this->assertEquals([3, 1], $subset->getSubset(4));
+    }
+
+    public function testSetUnsorterReturnsCorrectSubsetDifferentOrder()
+    {
+        $subset = SubsetSum::create([5, 3, 1], 100);
+
+        $this->assertEquals([1, 3], $subset->getSubset(4));
+    }
 }
