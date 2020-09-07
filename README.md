@@ -131,7 +131,7 @@ To calculate subset sum without repetition, we have to create a table where rows
 | __50__ | 0   | 0   | 0   | 0   | 10  | 0   | 0   | 0   | 10  | 20  | 30  |
 | __70__ | 0   | 0   | 0   | 0   | 10  | 0   | 0   | 0   | 0   | 0   | 0   |
 
-> Rows and columns have to be sorted in ascending order
+> Columns have to be sorted in ascending order
 
 Cell value equals to how close we can get to target number with current rows filled. So if the cell value is `0` it means we can create subset that will produce sum equal to column value. If the cell value is `10` that means we can produce a subset, which sum is 10 less then column value. To fill a cell value we will use this algorithm:
 
