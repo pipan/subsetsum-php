@@ -7,11 +7,15 @@ namespace SubsetSum;
 use SubsetSum\Comparable\ClosestComparable;
 use SubsetSum\Comparable\Comparable;
 use SubsetSum\Comparable\ComparableFunction;
+use SubsetSum\Comparable\PreferGreaterSumComparable;
+use SubsetSum\Comparable\PreferLowerSumComparable;
 
 class SubsetSumBuilder
 {
     private $set;
     private $targetSet = [];
+    private $target;
+    private $targetSpacing;
     private $comparable;
 
     public function __construct()
@@ -31,13 +35,31 @@ class SubsetSumBuilder
         return $this;
     }
 
-    public function withTarget($target, $spacing = 1)
+    public function withTarget($target)
     {
-        $set = [];
-        for ($i = 0; $i <= $target; $i += $spacing) {
-            $set[] = $i;
-        }
-        return $this->withTargetSet($set);
+        return $this->withTargetSpaced($target, null);
+    }
+
+    public function withTargetSpaced($target, $spacing)
+    {
+        $this->target = $target;
+        $this->targetSpacing = $spacing;
+        return $this;
+    }
+
+    public function preferGreaterSum()
+    {
+        return $this->withComparable(new PreferGreaterSumComparable());
+    }
+
+    public function preferLowerSum()
+    {
+        return $this->withComparable(new PreferLowerSumComparable());
+    }
+
+    public function onlyExactSum()
+    {
+
     }
 
     public function withComparable(Comparable $comparable)
@@ -53,37 +75,24 @@ class SubsetSumBuilder
         );
     }
 
-//    private function createTargetSetFromSet($set)
-//    {
-//        if (count($set) <= 1) {
-//            return $set;
-//        }
-//        $commonDivisor = $set[0];
-//        for ($i = 1; $i < count($set); $i++) {
-//            $commonDivisor = gmp_gcd($commonDivisor, $set[$i]);
-//        }
-//        $targetSet = [];
-//        for ($i = 0; $i <= $set[count($set) - 1]; $i += $commonDivisor) {
-//            $targetSet[] = $i;
-//        }
-//        return $targetSet;
-//    }
+    private function getTargetSet()
+    {
+        if (!empty($targetSet)) {
+            return $this->targetSet;
+        }
+        if ($this->targetSpacing !== null) {
+            return TargetSet::evenlySpaced($this->target, $this->targetSpacing);
+        }
+        return TargetSet::fromSet($this->target, $this->set);
+    }
 
     public function build()
     {
-       $targetSet = $this->targetSet;
-//        if (empty($targetSet)) {
-//            $targetSet = $this->createTargetSetFromSet($this->set);
-//        }
-        return SetOverTargetTable::create($this->set, $targetSet, $this->comparable);
+        return SetsTable::create($this->set, $this->getTargetSet(), $this->comparable);
     }
 
     public function buildWithRepetition()
     {
-       $targetSet = $this->targetSet;
-//        if (empty($targetSet)) {
-//            $targetSet = $this->createTargetSetFromSet($this->set);
-//        }
-        return TargetOverSetTable::create($this->set, $targetSet, $this->comparable);
+        return TargetsTable::create($this->set, $this->getTargetSet(), $this->comparable);
     }
 }

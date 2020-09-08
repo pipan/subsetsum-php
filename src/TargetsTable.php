@@ -4,7 +4,7 @@
 namespace SubsetSum;
 
 
-class TargetOverSetTable implements Subset
+class TargetsTable implements Subset
 {
     private $nodes;
 
@@ -32,7 +32,7 @@ class TargetOverSetTable implements Subset
                 $nodes[$targetValue] = $node;
             }
         }
-        return new TargetOverSetTable($nodes);
+        return new TargetsTable($nodes);
     }
 
     public function get($target): ?TargetNode

@@ -6,7 +6,7 @@ namespace SubsetSum\Comparable;
 
 use SubsetSum\TargetNode;
 
-class ClosestLowerThenTargetComparable implements Comparable
+class PreferLowerSumComparable implements Comparable
 {
     public function compare(TargetNode $a, TargetNode $b)
     {

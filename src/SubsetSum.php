@@ -18,7 +18,7 @@ class SubsetSum
         for ($i = 0; $i <= $target; $i += $config['step']) {
             $targetSet[] = $i;
         }
-        return TargetOverSetTable::create($set, $targetSet, $config['comparable']);
+        return TargetsTable::create($set, $targetSet, $config['comparable']);
     }
 
     public static function create($set, $target, $config = []): Subset
@@ -31,6 +31,6 @@ class SubsetSum
         for ($i = 0; $i <= $target; $i += $config['step']) {
             $targetSet[] = $i;
         }
-        return SetOverTargetTable::create($set, $targetSet, $config['comparable']);
+        return SetsTable::create($set, $targetSet, $config['comparable']);
     }
 }

@@ -5,7 +5,7 @@ namespace Tests\SubsetSum;
 
 
 use PHPUnit\Framework\TestCase;
-use SubsetSum\Comparable\ClosestLowerThenTargetComparable;
+use SubsetSum\Comparable\PreferLowerSumComparable;
 use SubsetSum\SubsetSum;
 
 class SubsetSumLowerThenTargetTest extends TestCase
@@ -13,7 +13,7 @@ class SubsetSumLowerThenTargetTest extends TestCase
     public function testSetSizeOneContainsExactValue()
     {
         $subset = SubsetSum::create([1], 1, [
-            'comparable' => new ClosestLowerThenTargetComparable()
+            'comparable' => new PreferLowerSumComparable()
         ]);
 
         $this->assertEquals([1], $subset->getSubset(1));
@@ -22,7 +22,7 @@ class SubsetSumLowerThenTargetTest extends TestCase
     public function testSetSizeTwoContainsExactValue()
     {
         $subset = SubsetSum::create([1, 3], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
+            'comparable' => new PreferLowerSumComparable()
         ]);
 
         $this->assertEquals([3], $subset->getSubset(3));
@@ -31,7 +31,7 @@ class SubsetSumLowerThenTargetTest extends TestCase
     public function testSetSizeFiveCombineTwoForTargetValue()
     {
         $subset = SubsetSum::create([1, 2, 5, 7, 11], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
+            'comparable' => new PreferLowerSumComparable()
         ]);
 
         $this->assertEquals([11, 7, 2], $subset->getSubset(20));
@@ -40,7 +40,7 @@ class SubsetSumLowerThenTargetTest extends TestCase
     public function testSetSizeFiveNotExactMatchPickLower()
     {
         $subset = SubsetSum::create([1, 2, 5, 7, 13], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
+            'comparable' => new PreferLowerSumComparable()
         ]);
 
         $this->assertEquals([7, 2, 1], $subset->getSubset(11));
@@ -49,7 +49,7 @@ class SubsetSumLowerThenTargetTest extends TestCase
     public function testSetSizeFiveNonLowerPickTheSmalles()
     {
         $subset = SubsetSum::create([13, 17, 22], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
+            'comparable' => new PreferLowerSumComparable()
         ]);
 
         $this->assertEquals([13], $subset->getSubset(8));
