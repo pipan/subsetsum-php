@@ -141,29 +141,29 @@ Cell value equals to how close we can get to target number with current rows fil
 
 Compare all these three values (`remainder`, `remainder optimized` and `skip current`), pick the value, that is the best. In this case we will pick a value that's closest to zero.
 
-|        | 0   | 10                    | 20  | 30             | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-|:------:|:---:|:---------------------:|:---:|:--------------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| __0__  | 0   | 10                    | 20  | 30             | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-| __10__ | 0   | `remainder optimized` | 10  | `skip current` | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
-| __20__ | 0   | 0                     | 0   | `remainder`    |     |     |     |     |     |     |     |
-| __50__ |     |                       |     |                |     |     |     |     |     |     |     |
-| __70__ |     |                       |     |                |     |     |     |     |     |     |     |
+|        | 0   | 10                      | 20  | 30               | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+|:------:|:---:|:-----------------------:|:---:|:----------------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| __0__  | 0   | 10                      | 20  | 30               | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+| __10__ | 0   | __remainder optimized__ | 10  | __skip current__ | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
+| __20__ | 0   | 0                       | 0   | __remainder__    |     |     |     |     |     |     |     |
+| __50__ |     |                         |     |                  |     |     |     |     |     |     |     |
+| __70__ |     |                         |     |                  |     |     |     |     |     |     |     |
 
-|        | 0   | 10  | 20  | 30   | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-|:------:|:---:|:---:|:---:|:----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| __0__  | 0   | 10  | 20  | 30   | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-| __10__ | 0   | `0` | 10  | `20` | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
-| __20__ | 0   | 0   | 0   | `10` |     |     |     |     |     |     |     |
-| __50__ |     |     |     |      |     |     |     |     |     |     |     |
-| __70__ |     |     |     |      |     |     |     |     |     |     |     |
+|        | 0   | 10    | 20  | 30     | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+|:------:|:---:|:-----:|:---:|:------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| __0__  | 0   | 10    | 20  | 30     | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+| __10__ | 0   | __0__ | 10  | __20__ | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
+| __20__ | 0   | 0     | 0   | __10__ |     |     |     |     |     |     |     |
+| __50__ |     |       |     |        |     |     |     |     |     |     |     |
+| __70__ |     |       |     |        |     |     |     |     |     |     |     |
 
-|        | 0   | 10  | 20  | 30  | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-|:------:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| __0__  | 0   | 10  | 20  | 30  | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
-| __10__ | 0   | 0   | 10  | 20  | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
-| __20__ | 0   | 0   | 0   | `0` |     |     |     |     |     |     |     |
-| __50__ |     |     |     |     |     |     |     |     |     |     |     |
-| __70__ |     |     |     |     |     |     |     |     |     |     |     |
+|        | 0   | 10  | 20  | 30    | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+|:------:|:---:|:---:|:---:|:-----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| __0__  | 0   | 10  | 20  | 30    | 40  | 50  | 60  | 70  | 80  | 90  | 100 |
+| __10__ | 0   | 0   | 10  | 20    | 30  | 40  | 50  | 60  | 70  | 80  | 90  |
+| __20__ | 0   | 0   | 0   | __0__ |     |     |     |     |     |     |     |
+| __50__ |     |     |     |       |     |     |     |     |     |     |     |
+| __70__ |     |     |     |       |     |     |     |     |     |     |     |
 
 ### For Subset Sum With Repetition
 
@@ -188,39 +188,39 @@ To create a subset where items can repeat, we will have to flip the table axes. 
 Filling the table is basically the same as filling the table of classig subset table. We will iterate trough every row and for each row iterate trough every column. When the row is filled we will fill the besst column at the current row. Best column just stores the best result in a row. We will consider only two values
 
 * subtract current cell's column value and row value. Let's call it `remainder`. This is a scenario where we assume that the best result could be done by using only subset of size one. The only item in this subset would be current column's value.
-* if the reminder is greater then 0, then take the value in the best column in the `reminder` row. This is a scenarion where we add current column value to the best subset for the `reminder` target. Let's call this value `reminder optimized`
+* if the remainder is greater then 0, then take the value in the best column in the `remainder` row. This is a scenarion where we add current column value to the best subset for the `remainder` target. Let's call this value `remainder optimized`
 
 Current cell will have the better of the two values. In this case we will pick a value closest to zero. When the row is filled we will fill the best column with the best value in the row.
 
-|         | 20         | 50  | 70  | best                 |
-|:-------:|:----------:|:---:|:---:|:--------------------:|
-| __0__   | -20        | -50 | -70 | -20                  |
-| __10__  | -10        | -40 | -60 | -10                  |
-| __20__  | 0          | -30 | -50 | `reminder optimized` |
-| __30__  | -10        | -20 | -40 | -10                  |
-| __40__  | `reminder` |     |     |                      |
-| __50__  |            |     |     |                      |
-| __60__  |            |     |     |                      |
-| __70__  |            |     |     |                      |
+|         | 20            | 50  | 70  | best                    |
+|:-------:|:-------------:|:---:|:---:|:-----------------------:|
+| __0__   | -20           | -50 | -70 | -20                     |
+| __10__  | -10           | -40 | -60 | -10                     |
+| __20__  | 0             | -30 | -50 | __remainder optimized__ |
+| __30__  | -10           | -20 | -40 | -10                     |
+| __40__  | __remainder__ |     |     |                         |
+| __50__  |               |     |     |                         |
+| __60__  |               |     |     |                         |
+| __70__  |               |     |     |                         |
 
-|         | 20   | 50  | 70  | best |
-|:-------:|:----:|:---:|:---:|:----:|
-| __0__   | -20  | -50 | -70 | -20  |
-| __10__  | -10  | -40 | -60 | -10  |
-| __20__  | 0    | -30 | -50 | `0`  |
-| __30__  | -10  | -20 | -40 | -10  |
-| __40__  | `20` |     |     |      |
-| __50__  |      |     |     |      |
-| __60__  |      |     |     |      |
-| __70__  |      |     |     |      |
+|         | 20     | 50  | 70  | best   |
+|:-------:|:------:|:---:|:---:|:------:|
+| __0__   | -20    | -50 | -70 | -20    |
+| __10__  | -10    | -40 | -60 | -10    |
+| __20__  | 0      | -30 | -50 | __0__  |
+| __30__  | -10    | -20 | -40 | -10    |
+| __40__  | __20__ |     |     |        |
+| __50__  |        |     |     |        |
+| __60__  |        |     |     |        |
+| __70__  |        |     |     |        |
 
-|         | 20   | 50  | 70  | best |
-|:-------:|:----:|:---:|:---:|:----:|
-| __0__   | -20  | -50 | -70 | -20  |
-| __10__  | -10  | -40 | -60 | -10  |
-| __20__  | 0    | -30 | -50 | 0    |
-| __30__  | -10  | -20 | -40 | -10  |
-| __40__  | `0`  |     |     |      |
-| __50__  |      |     |     |      |
-| __60__  |      |     |     |      |
-| __70__  |      |     |     |      |
+|         | 20     | 50  | 70  | best |
+|:-------:|:------:|:---:|:---:|:----:|
+| __0__   | -20    | -50 | -70 | -20  |
+| __10__  | -10    | -40 | -60 | -10  |
+| __20__  | 0      | -30 | -50 | 0    |
+| __30__  | -10    | -20 | -40 | -10  |
+| __40__  | __0__  |     |     |      |
+| __50__  |        |     |     |      |
+| __60__  |        |     |     |      |
+| __70__  |        |     |     |      |
