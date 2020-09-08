@@ -3,7 +3,7 @@
 
 namespace SubsetSum;
 
-
+use InvalidArgumentException;
 use SubsetSum\Comparable\ClosestComparable;
 use SubsetSum\Comparable\Comparable;
 use SubsetSum\Comparable\ComparableFunction;
@@ -17,6 +17,7 @@ class SubsetSumBuilder
     private $target;
     private $targetSpacing;
     private $comparable;
+    private $exactMatch = false;
 
     public function __construct()
     {
@@ -37,11 +38,14 @@ class SubsetSumBuilder
 
     public function withTarget($target)
     {
-        return $this->withTargetSpaced($target, null);
+        return $this->withTargetSpaced($target, 1);
     }
 
     public function withTargetSpaced($target, $spacing)
     {
+        if ($target < 0) {
+            throw new InvalidArgumentException("Target cannot be negative number");
+        }
         $this->target = $target;
         $this->targetSpacing = $spacing;
         return $this;
@@ -59,7 +63,13 @@ class SubsetSumBuilder
 
     public function onlyExactSum()
     {
+        return $this->withExactSum(true);
+    }
 
+    public function withExactSum($enabled)
+    {
+        $this->exactMatch = $enabled;
+        return $this;
     }
 
     public function withComparable(Comparable $comparable)
@@ -77,22 +87,31 @@ class SubsetSumBuilder
 
     private function getTargetSet()
     {
-        if (!empty($targetSet)) {
+        if (!empty($this->targetSet)) {
             return $this->targetSet;
         }
-        if ($this->targetSpacing !== null) {
-            return TargetSet::evenlySpaced($this->target, $this->targetSpacing);
-        }
-        return TargetSet::fromSet($this->target, $this->set);
+        return TargetSet::evenlySpaced($this->target, $this->targetSpacing);
     }
 
     public function build()
     {
-        return SetsTable::create($this->set, $this->getTargetSet(), $this->comparable);
+        return $this->getTable(
+            SetsTable::create($this->set, $this->getTargetSet(), $this->comparable)
+        );
     }
 
     public function buildWithRepetition()
     {
-        return TargetsTable::create($this->set, $this->getTargetSet(), $this->comparable);
+        return $this->getTable(
+            TargetsTable::create($this->set, $this->getTargetSet(), $this->comparable)
+        );
+    }
+
+    private function getTable($table)
+    {
+        if (!$this->exactMatch) {
+            return $table;
+        }
+        return new ExactMatchSubset($table);
     }
 }

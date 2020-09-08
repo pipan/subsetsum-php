@@ -19,6 +19,10 @@ class SetsTable implements Subset
         for ($i = 0; $i < count($set); $i++) {
             $setValue = $set[$i];
             foreach ($targetSet as $targetValue) {
+                if ($targetValue === 0) {
+                    $nodes[$i][$targetValue] = new TargetNode(0, null, []);
+                    continue;
+                }
                 $node = new TargetNode($targetValue - $setValue, null, [$setValue]);
                 if (isset($nodes[$i - 1][$node->getValue()])) {
                     $previousNode = $nodes[$i - 1][$node->getValue()];

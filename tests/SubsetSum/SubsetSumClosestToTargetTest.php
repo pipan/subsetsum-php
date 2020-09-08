@@ -9,45 +9,41 @@ use SubsetSum\SubsetSum;
 
 class SubsetSumClosestToTargetTest extends TestCase
 {
-    public function testSetSizeOneContainsExactValue()
-    {
-        $subset = SubsetSum::create([1], 1);
-
-        $this->assertEquals([1], $subset->getSubset(1));
+    public function getCorrectInput() {
+        return [
+            'setSizeOfOne_exactMatch' => [[1], 1, [1]],
+            'setSizeOfTwo_exactMatch' => [[1, 3], 3, [3]],
+            'setSizeOfFive_exactMatchCombination' => [[1, 2, 5, 7, 11], 20, [11, 7, 2]],
+            'setSizeOfFive_notExactMatch_pickClosest' => [[1, 2, 5, 7, 11], 4, [5]],
+            'setUnsorted_exactMatchCombination' => [[5, 1, 3], 4, [3, 1]],
+            'setUnsorted_exactMatchCombinationReversedOrder' => [[5, 3, 1], 4, [1, 3]],
+            'setSizeOfOne_targetZero' => [[1, 2, 3], 0, []],
+            'emptySet' => [[], 10, []]
+        ];
     }
 
-    public function testSetSizeTwoContainsExactValue()
+    /**
+     * @dataProvider getCorrectInput
+     */
+    public function testCorrectInput($set, $target, $subset)
     {
-        $subset = SubsetSum::create([1, 3], 100);
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->build();
 
-        $this->assertEquals([3], $subset->getSubset(3));
+        $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testSetSizeFiveCombineTwoForTargetValue()
+    public function testNegativeTargetThrowsException()
     {
-        $subset = SubsetSum::create([1, 2, 5, 7, 11], 100);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals([11, 7, 2], $subset->getSubset(20));
-    }
+        $subsetTable = SubsetSum::builder()
+            ->withSet([1])
+            ->withTarget(-1)
+            ->build();
 
-    public function testSetSizeFiveNotExactMatchPickClosest()
-    {
-        $subset = SubsetSum::create([1, 2, 5, 7, 11], 100);
-
-        $this->assertEquals([5], $subset->getSubset(4));
-    }
-
-    public function testSetUnsorterReturnsCorrectSubset()
-    {
-        $subset = SubsetSum::create([5, 1, 3], 100);
-
-        $this->assertEquals([3, 1], $subset->getSubset(4));
-    }
-
-    public function testSetUnsorterReturnsCorrectSubsetDifferentOrder()
-    {
-        $subset = SubsetSum::create([5, 3, 1], 100);
-
-        $this->assertEquals([1, 3], $subset->getSubset(4));
+        $subsetTable->getSubset(-1);
     }
 }
