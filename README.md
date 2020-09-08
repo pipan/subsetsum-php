@@ -117,7 +117,7 @@ To compute a subset sum in a polynomial time you have to use dynamic programming
 
 Let's assume you want to find a subset equal to `100` and you can use only values in set `setOfValues = {10, 20, 50, 70}`. You would divide the target to smaller pecies, Actually, you would want to use `the greatest common diviser` of a set of values to create those smaller target pieces. In this example, the GCD would be `10` and our target pieces would look like this `setOfTargets = {0, 10, 20, 30, 40 50, 60, 70, 80, 90, 100}`. So our `n` would be equal to `count(setOfValues) == 4` and our `m` would equal to `count(setOfTargets) == 11`.
 
-> In this case it's faster to compute all permutations of values set (4 * 3 * 2 * 1 = 24) in comparison to our approach (11 * 4 = 44). If the set of values gets larger, we will see the advantage of our approach. Let's assume we have 20 items in the set. For all permutations, we will get (20! = 2.432902e+18). Now let's take a look at our approach and let's assume, we want to compute target number of 1000000 and the target set will contain every number until 1000000. So our approach will take 20 * 1000000 = 2*e+7.
+> In this case it's faster to compute all combinations of values set (4 * 3 * 2 * 1 = 24) in comparison to our approach (11 * 4 = 44). If the set of values gets larger, we will see the advantage of our approach. Let's assume we have 20 items in the set. For all combinations, we will get (20! = 2.432902e+18). Now let's take a look at our approach and let's assume, we want to compute target number of 1000000 and the target set will contain every number until 1000000. So our approach will take 20 * 1000000 = 2*e+7.
 
 ### For Subset Sum
 
