@@ -5,53 +5,48 @@ namespace Tests\SubsetSum;
 
 
 use PHPUnit\Framework\TestCase;
-use SubsetSum\Comparable\ClosestLowerThenTargetComparable;
+use SubsetSum\Comparable\PreferLowerSumComparable;
 use SubsetSum\SubsetSum;
+use Tests\Inputs;
 
 class SubsetSumLowerThenTargetTest extends TestCase
 {
-    public function testSetSizeOneContainsExactValue()
-    {
-        $subset = SubsetSum::create([1], 1, [
-            'comparable' => new ClosestLowerThenTargetComparable()
-        ]);
-
-        $this->assertEquals([1], $subset->getSubset(1));
+    public function getCorrectInput() {
+        $inputs = Inputs::getCorrectInputs();
+        return array_merge($inputs['no_repetition']['default'], $inputs['no_repetition']['lower']);
     }
 
-    public function testSetSizeTwoContainsExactValue()
+    /**
+     * @dataProvider getCorrectInput
+     */
+    public function testCorrectInput($set, $target, $subset)
     {
-        $subset = SubsetSum::create([1, 3], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
-        ]);
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->withComparable(new PreferLowerSumComparable())
+            ->build();
 
-        $this->assertEquals([3], $subset->getSubset(3));
+        $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testSetSizeFiveCombineTwoForTargetValue()
-    {
-        $subset = SubsetSum::create([1, 2, 5, 7, 11], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
-        ]);
-
-        $this->assertEquals([11, 7, 2], $subset->getSubset(20));
+    public function getInvalidArgumentInput() {
+        $inputs = Inputs::getInvalidArgumentInputs();
+        return $inputs['no_repetition'];
     }
 
-    public function testSetSizeFiveNotExactMatchPickLower()
+    /**
+     * @dataProvider getInvalidArgumentInput
+     */
+    public function testInvalidArgumentException($set, $target)
     {
-        $subset = SubsetSum::create([1, 2, 5, 7, 13], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
-        ]);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals([7, 2, 1], $subset->getSubset(11));
-    }
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->build();
 
-    public function testSetSizeFiveNonLowerPickTheSmalles()
-    {
-        $subset = SubsetSum::create([13, 17, 22], 100, [
-            'comparable' => new ClosestLowerThenTargetComparable()
-        ]);
-
-        $this->assertEquals([13], $subset->getSubset(8));
+        $subsetTable->getSubset($target);
     }
 }

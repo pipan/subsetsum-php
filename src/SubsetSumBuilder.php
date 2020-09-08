@@ -3,16 +3,21 @@
 
 namespace SubsetSum;
 
-
+use InvalidArgumentException;
 use SubsetSum\Comparable\ClosestComparable;
 use SubsetSum\Comparable\Comparable;
 use SubsetSum\Comparable\ComparableFunction;
+use SubsetSum\Comparable\PreferGreaterSumComparable;
+use SubsetSum\Comparable\PreferLowerSumComparable;
 
 class SubsetSumBuilder
 {
     private $set;
     private $targetSet = [];
+    private $target;
+    private $targetSpacing;
     private $comparable;
+    private $exactMatch = false;
 
     public function __construct()
     {
@@ -31,13 +36,40 @@ class SubsetSumBuilder
         return $this;
     }
 
-    public function withTarget($target, $spacing = 1)
+    public function withTarget($target)
     {
-        $set = [];
-        for ($i = 0; $i <= $target; $i += $spacing) {
-            $set[] = $i;
+        return $this->withTargetSpaced($target, 1);
+    }
+
+    public function withTargetSpaced($target, $spacing)
+    {
+        if ($target < 0) {
+            throw new InvalidArgumentException("Target cannot be negative number");
         }
-        return $this->withTargetSet($set);
+        $this->target = $target;
+        $this->targetSpacing = $spacing;
+        return $this;
+    }
+
+    public function preferGreaterSum()
+    {
+        return $this->withComparable(new PreferGreaterSumComparable());
+    }
+
+    public function preferLowerSum()
+    {
+        return $this->withComparable(new PreferLowerSumComparable());
+    }
+
+    public function onlyExactSum()
+    {
+        return $this->withExactSum(true);
+    }
+
+    public function withExactSum($enabled)
+    {
+        $this->exactMatch = $enabled;
+        return $this;
     }
 
     public function withComparable(Comparable $comparable)
@@ -53,37 +85,33 @@ class SubsetSumBuilder
         );
     }
 
-//    private function createTargetSetFromSet($set)
-//    {
-//        if (count($set) <= 1) {
-//            return $set;
-//        }
-//        $commonDivisor = $set[0];
-//        for ($i = 1; $i < count($set); $i++) {
-//            $commonDivisor = gmp_gcd($commonDivisor, $set[$i]);
-//        }
-//        $targetSet = [];
-//        for ($i = 0; $i <= $set[count($set) - 1]; $i += $commonDivisor) {
-//            $targetSet[] = $i;
-//        }
-//        return $targetSet;
-//    }
+    private function getTargetSet()
+    {
+        if (!empty($this->targetSet)) {
+            return $this->targetSet;
+        }
+        return TargetSet::evenlySpaced($this->target, $this->targetSpacing);
+    }
 
     public function build()
     {
-       $targetSet = $this->targetSet;
-//        if (empty($targetSet)) {
-//            $targetSet = $this->createTargetSetFromSet($this->set);
-//        }
-        return SetOverTargetTable::create($this->set, $targetSet, $this->comparable);
+        return $this->getTable(
+            SetsTable::create($this->set, $this->getTargetSet(), $this->comparable)
+        );
     }
 
     public function buildWithRepetition()
     {
-       $targetSet = $this->targetSet;
-//        if (empty($targetSet)) {
-//            $targetSet = $this->createTargetSetFromSet($this->set);
-//        }
-        return TargetOverSetTable::create($this->set, $targetSet, $this->comparable);
+        return $this->getTable(
+            TargetsTable::create($this->set, $this->getTargetSet(), $this->comparable)
+        );
+    }
+
+    private function getTable($table)
+    {
+        if (!$this->exactMatch) {
+            return $table;
+        }
+        return new ExactMatchSubset($table);
     }
 }

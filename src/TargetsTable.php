@@ -4,7 +4,7 @@
 namespace SubsetSum;
 
 
-class TargetOverSetTable implements Subset
+class TargetsTable implements Subset
 {
     private $nodes;
 
@@ -15,8 +15,17 @@ class TargetOverSetTable implements Subset
 
     public static function create($set, $targetSet, $comparable)
     {
+        foreach ($set as $value) {
+            if ($value <= 0) {
+                throw new \InvalidArgumentException("Set cannot containt value less then 1");
+            }
+        }
         $nodes = [];
         foreach ($targetSet as $targetValue) {
+            if ($targetValue === 0) {
+                $nodes[$targetValue] = new TargetNode(0, null, []);
+                continue;
+            }
             foreach ($set as $setValue) {
                 $node = new TargetNode($targetValue - $setValue, null, [$setValue]);
                 $reminder = $node->getValue();
@@ -32,7 +41,7 @@ class TargetOverSetTable implements Subset
                 $nodes[$targetValue] = $node;
             }
         }
-        return new TargetOverSetTable($nodes);
+        return new TargetsTable($nodes);
     }
 
     public function get($target): ?TargetNode

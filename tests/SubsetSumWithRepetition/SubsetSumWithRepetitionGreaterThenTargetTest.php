@@ -5,70 +5,59 @@ namespace Tests\SubsetSumWithRepetition;
 
 
 use PHPUnit\Framework\TestCase;
-use SubsetSum\Comparable\ClosestGreaterThenTargetComparable;
+use SubsetSum\Comparable\PreferGreaterSumComparable;
 use SubsetSum\SubsetSum;
-use SubsetSum\SubsetSumWithRepetition;
+use Tests\Inputs;
 
 class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
 {
-    public function testSetOfOneEqualsToTarget()
-    {
-        $subset = SubsetSum::createWithRepetition([1], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
-
-        $this->assertEquals([1], $subset->getSubset(1));
+    public function getCorrectInput() {
+        $inputs = Inputs::getCorrectInputs();
+        return array_merge(
+            $inputs['no_repetition']['default'],
+            $inputs['no_repetition']['greater'],
+            $inputs['repetition']['default']
+        );
     }
 
-    public function testSetOfOneEqualsToTargetRepeated()
+    /**
+     * @dataProvider getCorrectInput
+     */
+    public function testCorrectInput($set, $target, $subset)
     {
-        $subset = SubsetSum::createWithRepetition([1], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->withComparable(new PreferGreaterSumComparable())
+            ->buildWithRepetition();
 
-        $this->assertEquals([1, 1], $subset->getSubset(2));
+        $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testSetOneItemEqualsToTarget()
-    {
-        $subset = SubsetSum::createWithRepetition([2, 3], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
-
-        $this->assertEquals([3], $subset->getSubset(3));
+    public function getInvalidArgumentInput() {
+        $inputs = Inputs::getInvalidArgumentInputs();
+        return $inputs['no_repetition'];
     }
 
-    public function testSetNoneEqualsTargetPickClosestPositive()
+    /**
+     * @dataProvider getInvalidArgumentInput
+     */
+    public function testInvalidArgumentException($set, $target)
     {
-        $subset = SubsetSum::createWithRepetition([2, 4, 5, 7], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals([4], $subset->getSubset(3));
-    }
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->build();
 
-    public function testSetCombinationEquals()
-    {
-        $subset = SubsetSum::createWithRepetition([1, 2, 4, 5, 7], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
-
-        $this->assertEquals([2, 1], $subset->getSubset(3));
-    }
-
-    public function testSetTwoSubsetsEqualsPickFirstInSet()
-    {
-        $subset = SubsetSum::createWithRepetition([2, 4, 5, 7], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable()
-        ]);
-
-        $this->assertEquals([7, 2], $subset->getSubset(9));
+        $subsetTable->getSubset($target);
     }
 
     public function testSetStepSize10()
     {
         $subset = SubsetSum::createWithRepetition([30, 40], 100, [
-            'comparable' => new ClosestGreaterThenTargetComparable(),
+            'comparable' => new PreferGreaterSumComparable(),
             'step' => 10
         ]);
 
@@ -78,7 +67,7 @@ class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
     public function testSetStepSize10NotEquesl()
     {
         $subset = SubsetSum::createWithRepetition([50, 70], 300, [
-            'comparable' => new ClosestGreaterThenTargetComparable(),
+            'comparable' => new PreferGreaterSumComparable(),
             'step' => 10
         ]);
 

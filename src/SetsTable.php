@@ -3,8 +3,9 @@
 
 namespace SubsetSum;
 
+use InvalidArgumentException;
 
-class SetOverTargetTable implements Subset
+class SetsTable implements Subset
 {
     private $nodes;
 
@@ -15,10 +16,19 @@ class SetOverTargetTable implements Subset
 
     public static function create($set, $targetSet, $comparable)
     {
+        foreach ($set as $value) {
+            if ($value <= 0) {
+                throw new InvalidArgumentException("Set cannot containt value less then 1");
+            }
+        }
         $nodes = [];
         for ($i = 0; $i < count($set); $i++) {
             $setValue = $set[$i];
             foreach ($targetSet as $targetValue) {
+                if ($targetValue === 0) {
+                    $nodes[$i][$targetValue] = new TargetNode(0, null, []);
+                    continue;
+                }
                 $node = new TargetNode($targetValue - $setValue, null, [$setValue]);
                 if (isset($nodes[$i - 1][$node->getValue()])) {
                     $previousNode = $nodes[$i - 1][$node->getValue()];
@@ -35,7 +45,7 @@ class SetOverTargetTable implements Subset
                 $nodes[$i][$targetValue] = $node;
             }
         }
-        return new SetOverTargetTable($nodes);
+        return new SetsTable($nodes);
     }
 
     public function get($target): ?TargetNode

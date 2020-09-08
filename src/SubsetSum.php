@@ -10,27 +10,26 @@ class SubsetSum
 {
     public static function createWithRepetition($set, $target, $config = []): Subset
     {
-        $config += [
-            'step' => 1,
-            'comparable' => new ClosestComparable()
-        ];
-        $targetSet = [];
-        for ($i = 0; $i <= $target; $i += $config['step']) {
-            $targetSet[] = $i;
-        }
-        return TargetOverSetTable::create($set, $targetSet, $config['comparable']);
+        return SubsetSum::builder()
+            ->withSet($set)
+            ->withTargetSpaced($target, $config['step'] ?? 1)
+            ->withComparable($config['comparable'] ?? new ClosestComparable())
+            ->withExactSum($config['exact'] ?? false)
+            ->buildWithRepetition();
     }
 
     public static function create($set, $target, $config = []): Subset
     {
-        $config += [
-            'step' => 1,
-            'comparable' => new ClosestComparable()
-        ];
-        $targetSet = [];
-        for ($i = 0; $i <= $target; $i += $config['step']) {
-            $targetSet[] = $i;
-        }
-        return SetOverTargetTable::create($set, $targetSet, $config['comparable']);
+        return SubsetSum::builder()
+            ->withSet($set)
+            ->withTargetSpaced($target, $config['step'] ?? 1)
+            ->withComparable($config['comparable'] ?? new ClosestComparable())
+            ->withExactSum($config['exact'] ?? false)
+            ->build();
+    }
+
+    public static function builder(): SubsetSumBuilder
+    {
+        return new SubsetSumBuilder();
     }
 }
