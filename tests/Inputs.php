@@ -42,6 +42,17 @@ class Inputs
                 'greater' => [],
                 'lower' => []
             ]
-            ];
+        ];
+    }
+
+    public static function getInvalidArgumentInputs()
+    {
+        return [
+            'no_repetition' => [
+                'negativeTarget' => [[1], -1],
+                'negativeSetValue' => [[1, -3], 1],
+            ],
+            'repetition' => []
+        ];
     }
 }

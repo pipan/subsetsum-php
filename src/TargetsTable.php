@@ -15,6 +15,11 @@ class TargetsTable implements Subset
 
     public static function create($set, $targetSet, $comparable)
     {
+        foreach ($set as $value) {
+            if ($value <= 0) {
+                throw new \InvalidArgumentException("Set cannot containt value less then 1");
+            }
+        }
         $nodes = [];
         foreach ($targetSet as $targetValue) {
             if ($targetValue === 0) {

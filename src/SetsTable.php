@@ -3,6 +3,7 @@
 
 namespace SubsetSum;
 
+use InvalidArgumentException;
 
 class SetsTable implements Subset
 {
@@ -15,6 +16,11 @@ class SetsTable implements Subset
 
     public static function create($set, $targetSet, $comparable)
     {
+        foreach ($set as $value) {
+            if ($value <= 0) {
+                throw new InvalidArgumentException("Set cannot containt value less then 1");
+            }
+        }
         $nodes = [];
         for ($i = 0; $i < count($set); $i++) {
             $setValue = $set[$i];

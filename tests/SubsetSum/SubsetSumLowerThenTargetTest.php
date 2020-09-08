@@ -30,15 +30,23 @@ class SubsetSumLowerThenTargetTest extends TestCase
         $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testNegativeTargetThrowsException()
+    public function getInvalidArgumentInput() {
+        $inputs = Inputs::getInvalidArgumentInputs();
+        return $inputs['no_repetition'];
+    }
+
+    /**
+     * @dataProvider getInvalidArgumentInput
+     */
+    public function testInvalidArgumentException($set, $target)
     {
         $this->expectException(\InvalidArgumentException::class);
 
         $subsetTable = SubsetSum::builder()
-            ->withSet([1])
-            ->withTarget(-1)
+            ->withSet($set)
+            ->withTarget($target)
             ->build();
 
-        $subsetTable->getSubset(-1);
+        $subsetTable->getSubset($target);
     }
 }
