@@ -6,28 +6,41 @@ namespace Tests\SubsetSumWithRepetition;
 
 use PHPUnit\Framework\TestCase;
 use SubsetSum\SubsetSum;
-use SubsetSum\SubsetSumWithRepetition;
+use Tests\Inputs;
 
 class SubsetSumWithRepetitionClosestToTargetTest extends TestCase
 {
-    public function testSetNotEqualsNineIsCloserToEight()
-    {
-        $subset = SubsetSum::createWithRepetition([5, 9], 100);
-
-        $this->assertEquals([9], $subset->getSubset(8));
+    public function getCorrectInput() {
+        $inputs = Inputs::getCorrectInputs();
+        return array_merge(
+            $inputs['no_repetition']['default'],
+            $inputs['no_repetition']['closest'],
+            $inputs['repetition']['default']
+        );
     }
 
-    public function testSetNotEqualsFiveIsCloserToSix()
+    /**
+     * @dataProvider getCorrectInput
+     */
+    public function testCorrectInput($set, $target, $subset)
     {
-        $subset = SubsetSum::createWithRepetition([5, 9], 100);
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->buildWithRepetition();
 
-        $this->assertEquals([5], $subset->getSubset(6));
+        $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testSetNotEqualsBothSameDistancePickLatter()
+    public function testNegativeTargetThrowsException()
     {
-        $subset = SubsetSum::createWithRepetition([5, 9], 100);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals([9], $subset->getSubset(7));
+        $subsetTable = SubsetSum::builder()
+            ->withSet([1])
+            ->withTarget(-1)
+            ->buildWithRepetition();
+
+        $subsetTable->getSubset(-1);
     }
 }

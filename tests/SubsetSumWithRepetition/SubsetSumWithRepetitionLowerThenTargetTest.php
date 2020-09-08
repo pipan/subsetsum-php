@@ -7,62 +7,43 @@ namespace Tests\SubsetSumWithRepetition;
 use PHPUnit\Framework\TestCase;
 use SubsetSum\Comparable\PreferLowerSumComparable;
 use SubsetSum\SubsetSum;
-use SubsetSum\SubsetSumWithRepetition;
+use Tests\Inputs;
 
 class SubsetSumWithRepetitionLowerThenTargetTest extends TestCase
 {
-    public function testSetOfOneEqualsToTarget()
-    {
-        $subset = SubsetSum::createWithRepetition([1], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
-
-        $this->assertEquals([1], $subset->getSubset(1));
+    public function getCorrectInput() {
+        $inputs = Inputs::getCorrectInputs();
+        return array_merge(
+            $inputs['no_repetition']['default'],
+            $inputs['no_repetition']['lower'],
+            $inputs['repetition']['default']
+        );
     }
 
-    public function testSetOfOneEqualsToTargetRepeated()
+    /**
+     * @dataProvider getCorrectInput
+     */
+    public function testCorrectInput($set, $target, $subset)
     {
-        $subset = SubsetSum::createWithRepetition([1], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
+        $subsetTable = SubsetSum::builder()
+            ->withSet($set)
+            ->withTarget($target)
+            ->withComparable(new PreferLowerSumComparable())
+            ->buildWithRepetition();
 
-        $this->assertEquals([1, 1], $subset->getSubset(2));
+        $this->assertEquals($subset, $subsetTable->getSubset($target));
     }
 
-    public function testSetOneItemEqualsToTarget()
+    public function testNegativeTargetThrowsException()
     {
-        $subset = SubsetSum::createWithRepetition([2, 3], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertEquals([3], $subset->getSubset(3));
-    }
+        $subsetTable = SubsetSum::builder()
+            ->withSet([1])
+            ->withTarget(-1)
+            ->buildWithRepetition();
 
-    public function testSetNoneEqualsTargetPickClosestPositive()
-    {
-        $subset = SubsetSum::createWithRepetition([4, 5, 7], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
-
-        $this->assertEquals([5], $subset->getSubset(6));
-    }
-
-    public function testSetCombinationEquals()
-    {
-        $subset = SubsetSum::createWithRepetition([1, 2, 4, 5, 7], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
-
-        $this->assertEquals([2, 1], $subset->getSubset(3));
-    }
-
-    public function testSetTwoSubsetsEqualsPickFirstInSet()
-    {
-        $subset = SubsetSum::createWithRepetition([2, 4, 5, 7], 100, [
-            'comparable' => new PreferLowerSumComparable()
-        ]);
-
-        $this->assertEquals([7, 2], $subset->getSubset(9));
+        $subsetTable->getSubset(-1);
     }
 
     public function testSetStepSize10()

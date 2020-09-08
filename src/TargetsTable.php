@@ -17,6 +17,10 @@ class TargetsTable implements Subset
     {
         $nodes = [];
         foreach ($targetSet as $targetValue) {
+            if ($targetValue === 0) {
+                $nodes[$targetValue] = new TargetNode(0, null, []);
+                continue;
+            }
             foreach ($set as $setValue) {
                 $node = new TargetNode($targetValue - $setValue, null, [$setValue]);
                 $reminder = $node->getValue();
