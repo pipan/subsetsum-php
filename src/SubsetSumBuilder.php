@@ -15,7 +15,7 @@ class SubsetSumBuilder
     private $set;
     private $targetSet = [];
     private $target;
-    private $targetSpacing;
+    private $targetSpacing = null;
     private $comparable;
     private $exactMatch = false;
 
