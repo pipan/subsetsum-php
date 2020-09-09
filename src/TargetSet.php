@@ -35,6 +35,10 @@ class TargetSet
         if (count($set) === 0) {
             return TargetSet::evenlySpaced($target, 1);
         }
+
+        if ($set[count($set) - 1] < $target) {
+            $set[] = $target;
+        }
         $spacing = gmp_init($set[0]);
         foreach ($set as $value) {
             $spacing = gmp_gcd($spacing, gmp_init($value));
