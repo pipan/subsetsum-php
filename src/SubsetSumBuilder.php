@@ -3,7 +3,6 @@
 
 namespace SubsetSum;
 
-use InvalidArgumentException;
 use SubsetSum\Comparable\ClosestComparable;
 use SubsetSum\Comparable\Comparable;
 use SubsetSum\Comparable\ComparableFunction;
