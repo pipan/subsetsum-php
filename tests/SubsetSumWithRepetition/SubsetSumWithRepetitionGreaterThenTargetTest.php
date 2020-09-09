@@ -53,24 +53,4 @@ class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
 
         $subsetTable->getSubset($target);
     }
-
-    public function testSetStepSize10()
-    {
-        $subset = SubsetSum::createWithRepetition([30, 40], 100, [
-            'comparable' => new PreferGreaterSumComparable(),
-            'step' => 10
-        ]);
-
-        $this->assertEquals([40, 30, 30], $subset->getSubset(100));
-    }
-
-    public function testSetStepSize10NotEquesl()
-    {
-        $subset = SubsetSum::createWithRepetition([50, 70], 300, [
-            'comparable' => new PreferGreaterSumComparable(),
-            'step' => 10
-        ]);
-
-        $this->assertEquals([70, 50, 50], $subset->getSubset(160));
-    }
 }
