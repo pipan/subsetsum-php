@@ -15,7 +15,7 @@ class SubsetSumBuilder
     private $set;
     private $targetSet = [];
     private $target;
-    private $targetSpacing;
+    private $targetSpacing = null;
     private $comparable;
     private $exactMatch = false;
 
@@ -38,22 +38,11 @@ class SubsetSumBuilder
 
     public function withTarget($target)
     {
-        return $this->withTargetSpaced($target, 1);
+        return $this->withTargetSpaced($target, null);
     }
 
     public function withTargetSpaced($target, $spacing)
     {
-        if ($target < 0) {
-            throw new InvalidArgumentException("Target cannot be negative number");
-        }
-
-        if ($spacing < 0) {
-            throw new InvalidArgumentException("Target spacing cannot be negative number");
-        }
-
-        if ($spacing === 0) {
-            throw new InvalidArgumentException("Target spacing cannot be zero");
-        }
         $this->target = $target;
         $this->targetSpacing = $spacing;
         return $this;
@@ -97,6 +86,9 @@ class SubsetSumBuilder
     {
         if (!empty($this->targetSet)) {
             return $this->targetSet;
+        }
+        if ($this->targetSpacing === null) {
+            return TargetSet::fromSet($this->target, $this->set);
         }
         return TargetSet::evenlySpaced($this->target, $this->targetSpacing);
     }

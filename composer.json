@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "lmn/subsetsum",
   "description": "Php library for computing subset sum",
   "license": "MIT",
@@ -9,6 +9,9 @@
       "name": "Peter Gasparik"
     }
   ],
+  "suggest": {
+    "ext-gmp": "Needed for creating optimized target set from set values by finding the greatest commom divier"
+  },
   "require-dev": {
     "phpunir/phpunit": "~9.1.4"
   },
