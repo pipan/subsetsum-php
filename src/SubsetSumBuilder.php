@@ -46,6 +46,14 @@ class SubsetSumBuilder
         if ($target < 0) {
             throw new InvalidArgumentException("Target cannot be negative number");
         }
+
+        if ($spacing < 0) {
+            throw new InvalidArgumentException("Target spacing cannot be negative number");
+        }
+
+        if ($spacing === 0) {
+            throw new InvalidArgumentException("Target spacing cannot be zero");
+        }
         $this->target = $target;
         $this->targetSpacing = $spacing;
         return $this;
