@@ -3,7 +3,7 @@
 
 namespace Tests;
 
-
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SubsetSum\SubsetSum;
 
@@ -16,17 +16,27 @@ class TargetSpacingTest extends TestCase
             ->withTargetSpaced(100, 10)
             ->buildWithRepetition();
 
-        $this->assertEquals([40, 30, 30], $subsetTable->getSubset(100));
+        $this->assertEquals([40, 30, 30], $subsetTable->getSubset());
     }
 
-    public function testSpacingWithUnreachableTarget()
+    public function testTargetNotMultiplicationOfSpacing()
     {
         $subsetTable = SubsetSum::builder()
             ->withSet([30, 40])
             ->withTargetSpaced(101, 10)
             ->buildWithRepetition();
 
-        $this->assertEquals([], $subsetTable->getSubset(101));
+        $this->assertEquals([40, 30, 30], $subsetTable->getSubset());
+    }
+
+    public function testTargetLessThenSpacing()
+    {
+        $subsetTable = SubsetSum::builder()
+            ->withSet([30, 40])
+            ->withTargetSpaced(101, 999)
+            ->buildWithRepetition();
+
+        $this->assertEquals([40], $subsetTable->getSubset());
     }
 
     public function testNegativeSpacingInvalidArgument()

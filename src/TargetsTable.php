@@ -3,14 +3,23 @@
 
 namespace SubsetSum;
 
+use Exception;
+use InvalidArgumentException;
 
-class TargetsTable implements Subset
+class TargetsTable implements SubsetTableResult
 {
     private $nodes;
+    private $maxTarget;
 
     public function __construct($nodes)
     {
         $this->nodes = $nodes;
+
+        $count = count($this->nodes);
+        if ($count === 0) {
+            throw new Exception("Cannot create TargetsTable with empty nodes data");
+        }
+        $this->maxTarget = array_key_last($this->nodes);
     }
 
     public static function create($set, $targetSet, $comparable)
@@ -44,7 +53,7 @@ class TargetsTable implements Subset
         return new TargetsTable($nodes);
     }
 
-    public function get($target): ?TargetNode
+    private function get($target): ?TargetNode
     {
         if (!isset($this->nodes[$target])) {
             return null;
@@ -52,12 +61,21 @@ class TargetsTable implements Subset
         return $this->nodes[$target];
     }
 
-    public function getSubset($target): array
+    public function getSubsetForTarget($target): array
     {
         $node = $this->get($target);
         if ($node === null) {
-            return [];
+            throw new InvalidArgumentException("Target '$target' is not found in targets table");
         }
         return $node->getSubset();
+    }
+
+    public function getSubset(): array
+    {
+        try {
+            return $this->getSubsetForTarget($this->maxTarget);
+        } catch (InvalidArgumentException $ex) {
+            throw new Exception("Cannot create subset", 0, $ex);
+        }
     }
 }

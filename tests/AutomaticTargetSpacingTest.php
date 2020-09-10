@@ -26,6 +26,6 @@ class AutomaticTargetSpacingTest extends TestCase
             ->withTarget($target)
             ->buildWithRepetition();
 
-        $this->assertEquals($subset, $subsetTable->getSubset($target));
+        $this->assertEquals($subset, $subsetTable->getSubset());
     }
 }

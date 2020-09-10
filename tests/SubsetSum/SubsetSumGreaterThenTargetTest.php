@@ -27,7 +27,7 @@ class SubsetSumGreaterThenTargetTest extends TestCase
             ->withComparable(new PreferGreaterSumComparable())
             ->build();
 
-        $this->assertEquals($subset, $subsetTable->getSubset($target));
+        $this->assertEquals($subset, $subsetTable->getSubset());
     }
 
     public function getInvalidArgumentInput() {
@@ -46,7 +46,5 @@ class SubsetSumGreaterThenTargetTest extends TestCase
             ->withSet($set)
             ->withTarget($target)
             ->build();
-
-        $subsetTable->getSubset($target);
     }
 }

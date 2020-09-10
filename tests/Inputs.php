@@ -15,8 +15,7 @@ class Inputs
                     'twoSubsetsMatch_pickLatterInSet' => [[2, 4, 5, 7], 9, [7, 2]],
                     'setUnsorted_exactMatchCombination' => [[5, 1, 3], 4, [3, 1]],
                     'setUnsorted_exactMatchCombinationReversedOrder' => [[5, 3, 1], 4, [1, 3]],
-                    'setSizeOfOne_targetZero' => [[1, 2, 3], 0, []],
-                    'emptySet' => [[], 10, []]
+                    'setSizeOfOne_targetZero' => [[1, 2, 3], 0, []]
                 ],
                 'closest' => [
                     'pickCloser_nineIsCloserToEight' => [[5, 9], 8, [9]],
@@ -50,7 +49,17 @@ class Inputs
         return [
             'no_repetition' => [
                 'negativeTarget' => [[1], -1],
-                'negativeSetValue' => [[1, -3], 1],
+                'negativeSetValue' => [[1, -3], 1]
+            ],
+            'repetition' => []
+        ];
+    }
+
+    public static function getExceptionInputs()
+    {
+        return [
+            'no_repetition' => [
+                'emptySet' => [[], 10, []]
             ],
             'repetition' => []
         ];
