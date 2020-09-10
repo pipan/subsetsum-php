@@ -8,7 +8,7 @@ use SubsetSum\Comparable\ClosestComparable;
 
 class SubsetSum
 {
-    public static function createWithRepetition($set, $target, $config = []): Subset
+    public static function createWithRepetition($set, $target, $config = []): SubsetTableResult
     {
         return SubsetSum::builder()
             ->withSet($set)
@@ -18,7 +18,7 @@ class SubsetSum
             ->buildWithRepetition();
     }
 
-    public static function create($set, $target, $config = []): Subset
+    public static function create($set, $target, $config = []): SubsetTableResult
     {
         return SubsetSum::builder()
             ->withSet($set)

@@ -2,33 +2,34 @@
 
 namespace SubsetSum;
 
-class ExactMatchSubset implements Subset
+class ExactMatchSubset implements SubsetTableResult
 {
     private $table;
+    private $defaultTarget;
 
-    public function __construct(Subset $table)
+    public function __construct(SubsetTableResult $table, $defaultTarget)
     {
         $this->table = $table;
+        $this->defaultTarget = $defaultTarget;
     }
 
-    public function get($target): ?TargetNode
+    public function getSubsetForTarget($target): array
     {
-        $subset = $this->table->get($target);
-        if ($subset === null) {
-            return null;
+        $subset = $this->table->getSubsetForTarget($target);
+        $sum = 0;
+        foreach ($subset as $value) {
+            $sum += $value;
         }
-        if ($subset->getValue() !== 0) {
-            return null;
+
+        if ($sum !== $target) {
+            return [];
         }
+        
         return $subset;
     }
 
-    public function getSubset($target): array
+    public function getSubset(): array
     {
-        $subset = $this->get($target);
-        if ($subset === null) {
-            return [];
-        }
-        return $subset->getSubset();
+        return $this->getSubsetForTarget($this->defaultTarget);
     }
 }
