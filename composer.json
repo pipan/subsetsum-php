@@ -1,7 +1,12 @@
 {
-  "version": "0.2.1",
+  "version": "0.3.0",
   "name": "lmn/subsetsum",
   "description": "Php library for computing subset sum",
+  "keywords": [
+    "subset sum",
+    "subset",
+    "subsetsum"
+  ],
   "license": "MIT",
   "authors": [
     {
