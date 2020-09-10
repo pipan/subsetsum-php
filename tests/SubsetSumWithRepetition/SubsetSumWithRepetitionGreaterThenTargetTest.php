@@ -31,7 +31,7 @@ class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
             ->withComparable(new PreferGreaterSumComparable())
             ->buildWithRepetition();
 
-        $this->assertEquals($subset, $subsetTable->getSubset($target));
+        $this->assertEquals($subset, $subsetTable->getSubset());
     }
 
     public function getInvalidArgumentInput() {
@@ -50,7 +50,5 @@ class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
             ->withSet($set)
             ->withTarget($target)
             ->build();
-
-        $subsetTable->getSubset($target);
     }
 }

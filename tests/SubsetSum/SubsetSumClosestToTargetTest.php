@@ -28,7 +28,7 @@ class SubsetSumClosestToTargetTest extends TestCase
             ->withTarget($target)
             ->build();
 
-        $this->assertEquals($subset, $subsetTable->getSubset($target));
+        $this->assertEquals($subset, $subsetTable->getSubset());
     }
 
     public function getInvalidArgumentInput() {
@@ -47,7 +47,5 @@ class SubsetSumClosestToTargetTest extends TestCase
             ->withSet($set)
             ->withTarget($target)
             ->build();
-
-        $subsetTable->getSubset($target);
     }
 }

@@ -3,15 +3,22 @@
 
 namespace SubsetSum;
 
+use Exception;
 use InvalidArgumentException;
 
-class SetsTable implements Subset
+class SetsTable implements SubsetTableResult
 {
     private $nodes;
+    private $maxTarget;
 
     public function __construct($nodes)
     {
         $this->nodes = $nodes;
+        $countSets = count($this->nodes);
+        if ($countSets === 0) {
+            throw new Exception("Cannot create SetsTable with empty nodes data");
+        }
+        $this->maxTarget = array_key_last($this->nodes[$countSets - 1]);
     }
 
     public static function create($set, $targetSet, $comparable)
@@ -48,24 +55,30 @@ class SetsTable implements Subset
         return new SetsTable($nodes);
     }
 
-    public function get($target): ?TargetNode
+    private function get($target): ?TargetNode
     {
         $countSets = count($this->nodes);
-        if (!isset($this->nodes[$countSets - 1])) {
-            return null;
-        }
         if (!isset($this->nodes[$countSets - 1][$target])) {
             return null;
         }
         return $this->nodes[$countSets - 1][$target];
     }
 
-    public function getSubset($target): array
+    public function getSubsetForTarget($target): array
     {
         $node = $this->get($target);
         if ($node === null) {
-            return [];
+            throw new InvalidArgumentException("Target '$target' is not found in sets table");
         }
         return $node->getSubset();
+    }
+
+    public function getSubset(): array
+    {
+        try {
+            return $this->getSubsetForTarget($this->maxTarget);
+        } catch (InvalidArgumentException $ex) {
+            throw new Exception("Cannot create subset", 0, $ex);
+        }
     }
 }

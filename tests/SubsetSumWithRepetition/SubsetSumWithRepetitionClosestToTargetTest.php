@@ -29,7 +29,7 @@ class SubsetSumWithRepetitionClosestToTargetTest extends TestCase
             ->withTarget($target)
             ->buildWithRepetition();
 
-        $this->assertEquals($subset, $subsetTable->getSubset($target));
+        $this->assertEquals($subset, $subsetTable->getSubset());
     }
 
     public function getInvalidArgumentInput() {
@@ -48,7 +48,5 @@ class SubsetSumWithRepetitionClosestToTargetTest extends TestCase
             ->withSet($set)
             ->withTarget($target)
             ->build();
-
-        $subsetTable->getSubset($target);
     }
 }

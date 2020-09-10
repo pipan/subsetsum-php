@@ -21,10 +21,10 @@ class TargetSet
             throw new InvalidArgumentException("Target spacing cannot be zero");
         }
         $targetSet = [];
-        for ($i = 0; $i <= $target; $i += $spacing) {
+        for ($i = $target; $i >= 0; $i -= $spacing) {
             $targetSet[] = $i;
         }
-        return $targetSet;
+        return array_reverse($targetSet);
     }
 
     public static function fromSet($target, $set)
