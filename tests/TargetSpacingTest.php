@@ -3,7 +3,6 @@
 
 namespace Tests;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SubsetSum\SubsetSum;
 

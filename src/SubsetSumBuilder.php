@@ -111,6 +111,6 @@ class SubsetSumBuilder
         if (!$this->exactMatch) {
             return $table;
         }
-        return new ExactMatchSubset($table);
+        return new ExactMatchSubset($table, $this->target);
     }
 }
