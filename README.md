@@ -10,7 +10,7 @@ __Via composer__
 
 ## API
 
-We recommend using `SubsetSumBuilder` for generating your subset sum tables. To create a builder just call `SubsetSum::builder()` static method.
+We recommend using `SubsetSumBuilder` for generating your subsets. To create a builder just call `SubsetSum::builder()` static method.
 
 ```php
 <?php
@@ -39,12 +39,26 @@ $subsetTable = SubsetSum::builder()
 
 ### Target
 
-To define the maximu target af a table call `withTarget` method with first argument of a maximum target value and second argument of taraget spacing.
+Subsets are calculated only to maximum target value. You have to define this maximum target value, by calling `withTarget` method. This method accepts one argument and that is the maximum targe value.
+To define the maximu target of a table, call `withTarget` method with first argument of a maximum target value and second argument of taraget spacing.
 
 ```php
 <?php
 $subsetTable = SubsetSum::builder()
-    ->withTarget(800, 100)
+    ->withTarget(800)
+    ...
+?>
+```
+
+> To optimize calculation we try to use `ext-gmp` php extention. If this extention is not presen, then subset will still be calculated correctly, but if will not be fully optimized. To optimize this algorith manualy, see paragraph below.
+
+If you dont want to install `ext-gmp` php extention, and you want to optimize your algoritmus as much as possible, then you can manually set spacing for calculating targets. Use `withTargetSpaced` method of a builder. Spacing should be `greatest common divider` of set values and final target.
+
+
+```php
+<?php
+$subsetTable = SubsetSum::builder()
+    ->withTargetSpaced(800, 100)
     ...
 ?>
 ```
@@ -85,15 +99,37 @@ $subsetTable = SubsetSum::builder()
 ?>
 ```
 
+### Find Only Exact Match
+
+Sometimes you may wish yo find subset only if it matches exactly the target value. You can use `onlyExactSum` method of a builder. If exact match cannot be found, you will receive empty array after calling `$subsetTable->getSubset();`.
+
+```php
+<?php
+$subsetTable = SubsetSum::builder()
+    ...
+    ->onlyExactSum();
+?>
+```
+
 ### Calculate Result Subset
 
-To calculate a subset from table call `getSubset` method of a subsetTable. The argument is a target value you vant your subset to have. If You request a bigger target value, then the table was build for, you will receive empty array.
+To calculate a subset from table call `getSubset` method of a subsetTable. This method will return a array of values (subset) that can be used to sum to maximal target value.
 
 ```php
 <?php
 $subsetTable = SubsetSum::builder()->...->build();
 
-$subset = $subsetTable->getSubset(100)
+$subset = $subsetTable->getSubset()
+?>
+```
+
+To receive a subset for target smaller then max target, you can call `getSubsetForTarget` with target value as a argument.
+
+```php
+<?php
+$subsetTable = SubsetSum::builder()->...->build();
+
+$subset = $subsetTable->getSubsetForTarget(100)
 ?>
 ```
 
@@ -111,13 +147,42 @@ $subsetTable = SubsetSum::builder()
 ?>
 ```
 
+Builder provides some predefined comperables.
+
+* prefer greater
+* prefer lower
+
+#### Prefer Greater
+
+To pick a subset that is equal or greater then target use `preferGreaterSum` method of a builder
+
+```php
+<?php
+$subsetTable = SubsetSum::builder()
+    ->preferGreaterSum()
+    ...
+?>
+```
+
+#### Prefer Lower
+
+Tto pick a subset that is equal or lower then target use `preferLowerSum` method of a builder
+
+```php
+<?php
+$subsetTable = SubsetSum::builder()
+    ->preferLowerSum()
+    ...
+?>
+```
+
 ## Algorithm
 
 To compute a subset sum in a polynomial time you have to use dynamic programming. This method will find subset in `O(n * m)` where `n` is number of items in source set and `m` is number of target increments.
 
 Let's assume you want to find a subset equal to `100` and you can use only values in set `setOfValues = {10, 20, 50, 70}`. You would divide the target to smaller pecies, Actually, you would want to use `the greatest common diviser` of a set of values to create those smaller target pieces. In this example, the GCD would be `10` and our target pieces would look like this `setOfTargets = {0, 10, 20, 30, 40 50, 60, 70, 80, 90, 100}`. So our `n` would be equal to `count(setOfValues) == 4` and our `m` would equal to `count(setOfTargets) == 11`.
 
-> In this case it's faster to compute all combinations of values set (4 * 3 * 2 * 1 = 24) in comparison to our approach (11 * 4 = 44). If the set of values gets larger, we will see the advantage of our approach. Let's assume we have 20 items in the set. For all combinations, we will get (20! = 2.432902e+18). Now let's take a look at our approach and let's assume, we want to compute target number of 1000000 and the target set will contain every number until 1000000. So our approach will take 20 * 1000000 = 2*e+7.
+> In this case it's faster to compute all combinations of values set (4 * 3 * 2 * 1 = 24) in comparison to our approach (11 * 4 = 44). If the set of values gets larger, we will see the advantage of our approach.
 
 ### For Subset Sum
 
@@ -130,8 +195,6 @@ To calculate subset sum without repetition, we have to create a table where rows
 | __20__ | 0   | 0   | 0   | 0   | 10  | 20  | 30  | 40  | 50  | 60  | 70  |
 | __50__ | 0   | 0   | 0   | 0   | 10  | 0   | 0   | 0   | 10  | 20  | 30  |
 | __70__ | 0   | 0   | 0   | 0   | 10  | 0   | 0   | 0   | 0   | 0   | 0   |
-
-> Columns have to be sorted in ascending order
 
 Cell value equals to how close we can get to target number with current rows filled. So if the cell value is `0` it means we can create subset that will produce sum equal to column value. If the cell value is `10` that means we can produce a subset, which sum is 10 less then column value. To fill a cell value we will use this algorithm:
 
@@ -183,9 +246,7 @@ To create a subset where items can repeat, we will have to flip the table axes. 
 | __90__  | 0   | 0   | 0   | 0    |
 | __100__ | 0   | 0   | 0   | 0    |
 
-> Rows and columns have to be sorted in ascending order
-
-Filling the table is basically the same as filling the table of classig subset table. We will iterate trough every row and for each row iterate trough every column. When the row is filled we will fill the besst column at the current row. Best column just stores the best result in a row. We will consider only two values
+Filling the table is basically the same as filling the table of classig subset table. We will iterate trough every row and for each row iterate trough every column. When the row is filled we will fill the best column at the current row. Best column just stores the best result in a row. We will consider only two values
 
 * subtract current cell's column value and row value. Let's call it `remainder`. This is a scenario where we assume that the best result could be done by using only subset of size one. The only item in this subset would be current column's value.
 * if the remainder is greater then 0, then take the value in the best column in the `remainder` row. This is a scenarion where we add current column value to the best subset for the `remainder` target. Let's call this value `remainder optimized`
