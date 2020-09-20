@@ -8,6 +8,22 @@ __Via composer__
 
 `composer require lmn/subsetsum`
 
+## Overview
+
+[wikipedia](https://en.wikipedia.org/wiki/Subset_sum_problem)
+
+This algorithm works only for positive integers as target and set values.
+
+### Complexity
+
+We compare this algorithm to algorithm where we try all possible combinations. In this base case, the complexity is exponential.
+
+If we use dynamic programming  we will end up with pseudo polynomial complexity `O(n * m)` where `n` is number of items in source set and `m` is number of target increments.
+
+![combinations vs dynamic programming chart](docs/assets/images/dynamic_programmig_chart.png)
+
+> Number of operations is on logarithmic scale. Calculating all combinations may seem to be linear but on logartihmic scale it means it is growing exponentialy. The same applies for dynamic programming, it may seem to be logarithmical, but on logarithmic scale it may be linear or polynomial (in this case it's linial because number of target incremest is fixed number = 100)
+
 ## API
 
 We recommend using `SubsetSumBuilder` for generating your subsets. To create a builder just call `SubsetSum::builder()` static method.
