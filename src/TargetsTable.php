@@ -19,7 +19,13 @@ class TargetsTable implements SubsetTableResult
         if ($count === 0) {
             throw new Exception("Cannot create TargetsTable with empty nodes data");
         }
-        $this->maxTarget = array_key_last($this->nodes);
+        $this->maxTarget = $this->getLastKey($this->nodes);
+    }
+
+    private function getLastKey($array)
+    {
+        end($array);
+        return key($array);
     }
 
     public static function create($set, $targetSet, $comparable)

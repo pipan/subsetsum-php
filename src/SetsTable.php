@@ -18,7 +18,13 @@ class SetsTable implements SubsetTableResult
         if ($countSets === 0) {
             throw new Exception("Cannot create SetsTable with empty nodes data");
         }
-        $this->maxTarget = array_key_last($this->nodes[$countSets - 1]);
+        $this->maxTarget = $this->getLastKey($this->nodes[$countSets - 1]);
+    }
+
+    private function getLastKey($array)
+    {
+        end($array);
+        return key($array);
     }
 
     public static function create($set, $targetSet, $comparable)
