@@ -15,7 +15,8 @@ class SubsetSumWithRepetitionClosestToTargetTest extends TestCase
         return array_merge(
             $inputs['no_repetition']['default'],
             $inputs['no_repetition']['closest'],
-            $inputs['repetition']['default']
+            $inputs['repetition']['default'],
+            $inputs['repetition']['closest']
         );
     }
 

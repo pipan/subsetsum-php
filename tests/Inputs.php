@@ -36,10 +36,20 @@ class Inputs
             'repetition' => [
                 'default' => [
                     'setSizeOfOne_exactMatchRepetition' => [[1], 3, [1, 1, 1]],
+                    'setSizeOfTwo_exactMatchRepetition' => [[2, 3], 9, [3, 3, 3]],
+                    'setSizeOfTwo_exactMatchRepetition_target_10' => [[2, 3], 10, [3, 3, 2, 2]],
+                    'setSizeOfThree_exactMatchRepetition' => [[5, 7, 11], 41, [11, 11, 7, 7, 5]],
+                    'setSizeOfThree_exactMatchRepetition_target_39' => [[5, 7, 11], 39, [11, 11, 7, 5, 5]],
                 ],
-                'closest' => [],
-                'greater' => [],
-                'lower' => []
+                'closest' => [
+                    'setSizeOfTwo' => [[5, 11], 23, [11, 11]],
+                ],
+                'greater' => [
+                    'setSizeOfTwo' => [[5, 11], 23, [5, 5, 5, 5, 5]],
+                ],
+                'lower' => [
+                    'setSizeOfTwo' => [[5, 11], 19, [11, 5]],
+                ]
             ]
         ];
     }
