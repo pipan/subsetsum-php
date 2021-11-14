@@ -61,7 +61,7 @@ class SetsTable implements SubsetTableResult
         return new SetsTable($nodes);
     }
 
-    private function get($target): ?TargetNode
+    private function get($target)
     {
         $countSets = count($this->nodes);
         if (!isset($this->nodes[$countSets - 1][$target])) {
@@ -70,7 +70,7 @@ class SetsTable implements SubsetTableResult
         return $this->nodes[$countSets - 1][$target];
     }
 
-    public function getSubsetForTarget($target): array
+    public function getSubsetForTarget($target)
     {
         $node = $this->get($target);
         if ($node === null) {
@@ -79,7 +79,7 @@ class SetsTable implements SubsetTableResult
         return $node->getSubset();
     }
 
-    public function getSubset(): array
+    public function getSubset()
     {
         try {
             return $this->getSubsetForTarget($this->maxTarget);

@@ -59,7 +59,7 @@ class TargetsTable implements SubsetTableResult
         return new TargetsTable($nodes);
     }
 
-    private function get($target): ?TargetNode
+    private function get($target)
     {
         if (!isset($this->nodes[$target])) {
             return null;
@@ -67,7 +67,7 @@ class TargetsTable implements SubsetTableResult
         return $this->nodes[$target];
     }
 
-    public function getSubsetForTarget($target): array
+    public function getSubsetForTarget($target)
     {
         $node = $this->get($target);
         if ($node === null) {
@@ -76,7 +76,7 @@ class TargetsTable implements SubsetTableResult
         return $node->getSubset();
     }
 
-    public function getSubset(): array
+    public function getSubset()
     {
         try {
             return $this->getSubsetForTarget($this->maxTarget);
