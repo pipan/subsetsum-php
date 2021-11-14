@@ -16,7 +16,8 @@ class SubsetSumWithRepetitionGreaterThenTargetTest extends TestCase
         return array_merge(
             $inputs['no_repetition']['default'],
             $inputs['no_repetition']['greater'],
-            $inputs['repetition']['default']
+            $inputs['repetition']['default'],
+            $inputs['repetition']['greater']
         );
     }
 

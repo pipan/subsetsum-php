@@ -6,5 +6,5 @@ namespace SubsetSum;
 
 interface SubsetTableResult extends SubsetResult
 {
-    public function getSubsetForTarget($target): array;
+    public function getSubsetForTarget($target);
 }

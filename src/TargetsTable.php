@@ -19,7 +19,13 @@ class TargetsTable implements SubsetTableResult
         if ($count === 0) {
             throw new Exception("Cannot create TargetsTable with empty nodes data");
         }
-        $this->maxTarget = array_key_last($this->nodes);
+        $this->maxTarget = $this->getLastKey($this->nodes);
+    }
+
+    private function getLastKey($array)
+    {
+        end($array);
+        return key($array);
     }
 
     public static function create($set, $targetSet, $comparable)
@@ -53,7 +59,7 @@ class TargetsTable implements SubsetTableResult
         return new TargetsTable($nodes);
     }
 
-    private function get($target): ?TargetNode
+    private function get($target)
     {
         if (!isset($this->nodes[$target])) {
             return null;
@@ -61,7 +67,7 @@ class TargetsTable implements SubsetTableResult
         return $this->nodes[$target];
     }
 
-    public function getSubsetForTarget($target): array
+    public function getSubsetForTarget($target)
     {
         $node = $this->get($target);
         if ($node === null) {
@@ -70,7 +76,7 @@ class TargetsTable implements SubsetTableResult
         return $node->getSubset();
     }
 
-    public function getSubset(): array
+    public function getSubset()
     {
         try {
             return $this->getSubsetForTarget($this->maxTarget);

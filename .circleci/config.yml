@@ -1,0 +1,52 @@
+version: 2.1
+commands:
+  test:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - composer-v2-{{ checksum "composer.lock" }}
+          - composer-v2-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v2-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run: ./vendor/bin/phpunit
+
+jobs:
+  test7_0:
+    docker:
+      - image: circleci/php:7.0
+    steps:
+      - test
+  test7_1:
+    docker:
+      - image: circleci/php:7.1
+    steps:
+      - test
+  test7_2:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - test
+  test7_3:
+    docker:
+      - image: circleci/php:7.3
+    steps:
+      - test
+  test7_4:
+    docker:
+      - image: circleci/php:7.4
+    steps:
+      - test
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - test7_0
+    - test7_1
+    - test7_2
+    - test7_3
+    - test7_4

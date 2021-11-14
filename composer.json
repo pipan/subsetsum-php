@@ -18,7 +18,7 @@
     "ext-gmp": "Needed for creating optimized target set from set values by finding the greatest commom divier"
   },
   "require-dev": {
-    "phpunir/phpunit": "~9.1.4"
+    "phpunit/phpunit": "6.x"
   },
   "autoload": {
     "psr-4": {

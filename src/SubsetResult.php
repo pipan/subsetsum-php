@@ -6,5 +6,5 @@ namespace SubsetSum;
 
 interface SubsetResult
 {
-    public function getSubset(): array;
+    public function getSubset();
 }

@@ -18,7 +18,13 @@ class SetsTable implements SubsetTableResult
         if ($countSets === 0) {
             throw new Exception("Cannot create SetsTable with empty nodes data");
         }
-        $this->maxTarget = array_key_last($this->nodes[$countSets - 1]);
+        $this->maxTarget = $this->getLastKey($this->nodes[$countSets - 1]);
+    }
+
+    private function getLastKey($array)
+    {
+        end($array);
+        return key($array);
     }
 
     public static function create($set, $targetSet, $comparable)
@@ -55,7 +61,7 @@ class SetsTable implements SubsetTableResult
         return new SetsTable($nodes);
     }
 
-    private function get($target): ?TargetNode
+    private function get($target)
     {
         $countSets = count($this->nodes);
         if (!isset($this->nodes[$countSets - 1][$target])) {
@@ -64,7 +70,7 @@ class SetsTable implements SubsetTableResult
         return $this->nodes[$countSets - 1][$target];
     }
 
-    public function getSubsetForTarget($target): array
+    public function getSubsetForTarget($target)
     {
         $node = $this->get($target);
         if ($node === null) {
@@ -73,7 +79,7 @@ class SetsTable implements SubsetTableResult
         return $node->getSubset();
     }
 
-    public function getSubset(): array
+    public function getSubset()
     {
         try {
             return $this->getSubsetForTarget($this->maxTarget);
