@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/php:7.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - composer-v2-{{ checksum "composer.lock" }}
+          - composer-v2-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v2-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run: ./vendor/bin/phpunit
+      - store_test_results:
+          path: tests/_output
+      - store_artifacts:
+          path: tests/_output
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - test
